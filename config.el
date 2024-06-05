@@ -6,8 +6,8 @@
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
-;; (setq user-full-name "John Doe"
-;;       user-mail-address "john@doe.com")
+ (setq user-full-name "Josh Meek"
+       user-mail-address "meek.josh@gmail.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -26,6 +26,10 @@
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14)
       doom-variable-pitch-font (font-spec :family "Alegreya" :size 18))
 
+;; On my Macbook, the default font I use on other machines is a bit too small. Up it just for Mac OS.
+(cond (:system 'macos
+               (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 18))))
+
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
 ;; refresh your font settings. If Emacs still can't find your font, it likely
@@ -35,6 +39,7 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-dracula)
+;;(setq doom-theme 'doom-1337)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -118,6 +123,9 @@
                          :desc "count keywords" "k" #'denote-explore-count-keywords
                          :desc "keywords barchart" "b" #'denote-explore-keywords-barchart
                          :desc "extensions barchart" "e" #'denote-explore-extensions-barchart)
+                (:prefix ("u" . "Utilities")
+                         :desc "insert dynamic links block" "l" #'denote-org-extras-dblock-insert-links
+                         :desc "update dynamic links block" "u" #'org-dblock-update)
                 (:prefix ("r" . "random walks")
                          :desc "random note" "r" #'denote-explore-random-note
                          :desc "random link" "l" #'denote-explore-random-link
@@ -136,10 +144,17 @@
 ;;        :desc "New journal entry" "j" #'org-journal-new-entry
 ;;        :desc "Search journal entry" "s" #'org-journal-search)))
 
-;; Maximize the window upon startup
-;;(setq initial-frame-alist '((top . 10) (left . 10) (width . 90) (height . 75)))
-(if (window-system)
-  (set-frame-height (selected-frame) 50))
+;; Set initial frame size and position
+(defun my/set-initial-frame ()
+  (let* ((base-factor 0.70)
+	(a-width (* (display-pixel-width) base-factor))
+        (a-height (* (display-pixel-height) base-factor))
+        (a-left (truncate (/ (- (display-pixel-width) a-width) 2)))
+	(a-top (truncate (/ (- (display-pixel-height) a-height) 2))))
+    (set-frame-position (selected-frame) a-left a-top)
+    (set-frame-size (selected-frame) (truncate a-width)  (truncate a-height) t)))
+(setq frame-resize-pixelwise t)
+(my/set-initial-frame)
 
 (use-package! denote-explore
   :custom
@@ -159,6 +174,21 @@
 
 ;; (diredfl-global-mode -1)
 ;; (diredfl-mode -1)
+
+
+;; stop asking me if I really want to quit!
+(setq confirm-kill-emacs nil)
+
+;; This will randomly choose a splash image from amongst those listed below and display it on startup.
+;; Splash images should be placed in .doom.d/splash
+(let ((alternatives '("doom-emacs-color.png"
+                      "doom-emacs-color2.svg"
+                      ;;"doom-emacs-bw-light.svg"
+                      "doom-emacs-flugo-slant_out_purple.png"
+                      "doom-emacs-flugo-slant_out_bw.png")))
+  (setq fancy-splash-image
+        (concat doom-user-dir "splash/"
+                (nth (random (length alternatives)) alternatives))))
 
 
 ;; None of this is currently work :(
