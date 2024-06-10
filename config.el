@@ -20,7 +20,8 @@
 (add-hook! org-mode :append
            #'visual-line-mode)
 
-(require 'denote)
+(add-hook 'org-mode-hook 'org-auto-tangle-mode)
+
 (setq denote-directory (expand-file-name "~/org/"))
 
 (setq denote-known-keywords '("emacs" "programming" "managing" "learning"))
@@ -143,3 +144,5 @@
   (setq company-auto-commit-chars nil) ;; this appears to now be obsolete, replaced with the below
   (setq company-insertion-triggers nil)
   )
+
+(use-package! yasnippet :config(yas-global-mode))

@@ -54,3 +54,7 @@
 (package! denote-explore)
 
 (package! denote-menu)
+
+(package! org-auto-tangle)
+
+(package! yasnippet)

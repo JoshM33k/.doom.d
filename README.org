@@ -2,6 +2,7 @@
 #+author: Josh Meek
 #+property: header-args emacs-lisp :tangle config.el
 #+startup: fold
+#+auto_tangle: t
 
 * Table of Contents :toc:
 - [[#about-this-config][About This Config]]
@@ -14,6 +15,7 @@
 - [[#org-mode-settings][Org Mode Settings]]
   - [[#org-directory][Org Directory]]
   - [[#word-wrap-in-org-files][Word Wrap in Org Files]]
+  - [[#auto-tangle][Auto-Tangle]]
   - [[#denote][Denote]]
 - [[#window-and-frame-management][Window and Frame Management]]
   - [[#initial-frame-sizing][Initial Frame Sizing]]
@@ -21,6 +23,8 @@
 - [[#remove-quit-verification][Remove Quit Verification]]
 - [[#splash-image][Splash Image]]
 - [[#company-adjustments][Company Adjustments]]
+- [[#java-development][Java Development]]
+  - [[#yasnippet][Yasnippet]]
 
 * About This Config
 This org file is a /literate/ config file for [[https://github.com/doomemacs/doomemacs][Doom Emacs]]. What that means is that this file itself is evaluated and used to write out the actual config.el file that is read when Doom Emacs starts up. The config.el file is no longer edited directly. This process is called /tangling/. This allows us to write out our documentation directly alongside the /actual code/ that will be evaluated by Doom Emacs, which is pretty neat!
@@ -105,6 +109,13 @@ This setting turns on ~visual-line-mode~ for org files, which wraps text to a ne
            #'visual-line-mode)
 #+end_src
 
+** Auto-Tangle
+Sometimes it can be a pain to remember to tangle this file, so this sets up 'auto-tangle-mode' and adds it to org mode as an option. To auto-tangle a file on save, just add ~#+auto_tangle: t~ to the top of your org file.
+
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook 'org-auto-tangle-mode)
+#+end_src
+
 ** Denote
 [[https://github.com/protesilaos/denote][Denote]] is a tool for creating and managing notes and files that works amazingly with org mode. I use it to implement a [[https://zettelkasten.de/overview/][Zettelkasten]] (sorta) system for tracking and maintaining my notes into a kind of mind map, with interconnected links between files.
 
@@ -116,7 +127,6 @@ Denote also has built-in tools for creating links between files, managing keywor
 This sets the default denote directory. Note that this is the same as my org mode default directory as well.
 
 #+begin_src emacs-lisp
-(require 'denote)
 (setq denote-directory (expand-file-name "~/org/"))
 #+end_src
 
@@ -305,4 +315,14 @@ Company is the autocompletion tool that Doom Emacs uses, and it can get quite an
   (setq company-auto-commit-chars nil) ;; this appears to now be obsolete, replaced with the below
   (setq company-insertion-triggers nil)
   )
+#+end_src
+
+* Java Development
+Getting java development working as well as IntelliJ is a backburner project for me. This section will be the projects and configurations added to hopefully enable that. Things added here may get moved to their own sections that are more appropriate once this setup solidifies.
+
+** Yasnippet
+This turns on yas global mode.
+
+#+begin_src emacs-lisp
+(use-package! yasnippet :config(yas-global-mode))
 #+end_src
