@@ -222,6 +222,9 @@ This sets the initial size of the Doom Emacs window to be proportional to the sc
 
 This was taken from: https://www.reddit.com/r/emacs/comments/9c0a4d/tip_setting_initial_frame_size_and_position/
 
+Note: This does not work well on dual-monitor setups currently.
+- [ ] - Fix issue with the set-initial-frame method for dual monitors to only 'fit' to a single monitor.
+
 #+begin_src emacs-lisp
 (defun my/set-initial-frame ()
   (let* ((base-factor 0.70)
