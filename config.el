@@ -6,7 +6,7 @@
 (setq user-full-name "Josh Meek"
       user-mail-address "meek.josh@gmail.com")
 
-(setq doom-font (font-spec :family "JetBrains Mono" :size 14))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 13))
 
 (cond (:system 'macos
                (setq doom-font (font-spec :family "JetBrains Mono" :size 16))))

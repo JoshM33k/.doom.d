@@ -72,7 +72,7 @@ More info on doom fonts can be found at ~C-h v doom-font~.
 My default font I like to use for Emacs is made by JetBrains, called JetBrainsMono. You can download it here:  https://www.jetbrains.com/lp/mono/
 
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "JetBrains Mono" :size 14))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 13))
 #+end_src
 
 On my Macbook, the font size of 14 is a bit small to read. I still want 14 to be my default size elsewhere, but for Mac OS, I bump the size up to 16 instead, still using JetBrainsMono as the font.
