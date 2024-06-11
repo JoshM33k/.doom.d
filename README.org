@@ -25,6 +25,11 @@
 - [[#company-adjustments][Company Adjustments]]
 - [[#java-development][Java Development]]
   - [[#yasnippet][Yasnippet]]
+  - [[#lsp-mode][Lsp-mode]]
+  - [[#which-key][Which-key]]
+  - [[#lsp-java][Lsp-java]]
+  - [[#dap-mode][Dap-Mode]]
+  - [[#helm][Helm]]
 
 * About This Config
 This org file is a /literate/ config file for [[https://github.com/doomemacs/doomemacs][Doom Emacs]]. What that means is that this file itself is evaluated and used to write out the actual config.el file that is read when Doom Emacs starts up. The config.el file is no longer edited directly. This process is called /tangling/. This allows us to write out our documentation directly alongside the /actual code/ that will be evaluated by Doom Emacs, which is pretty neat!
@@ -328,4 +333,36 @@ This turns on yas global mode.
 
 #+begin_src emacs-lisp
 (use-package! yasnippet :config(yas-global-mode))
+#+end_src
+
+** Lsp-mode
+
+#+begin_src emacs-lisp
+(use-package! lsp-mode :hook ((lsp-mode . lsp-enable-which-key-integration))
+              :config (setq lsp-completion-enable-additional-text-edit nil))
+#+end_src
+
+** Which-key
+
+#+begin_src emacs-lisp
+(use-package! which-key :config (which-key-mode))
+#+end_src
+
+** Lsp-java
+
+#+begin_src emacs-lisp
+(use-package! lsp-java :config (add-hook 'java-mode-hook 'lsp))
+#+end_src
+
+** Dap-Mode
+
+#+begin_src emacs-lisp
+(use-package! dap-mode :after lsp-mode :config (dap-auto-configure-mode))
+#+end_src
+
+
+** Helm
+
+#+begin_src emacs-lisp
+(use-package! helm :config (helm-mode))
 #+end_src

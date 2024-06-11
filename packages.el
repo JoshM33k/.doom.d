@@ -57,4 +57,30 @@
 
 (package! org-auto-tangle)
 
+;; These packages were all added to support java development.
+;; See: https://www.youtube.com/watch?v=Yah69AfYP34
 (package! yasnippet)
+
+(package! flycheck)
+
+(package! projectile)
+
+(package! lsp-mode)
+
+(package! hydra)
+
+(package! company)
+
+(package! lsp-ui)
+
+(package! which-key)
+
+(package! lsp-java)
+
+(package! dap-mode)
+
+(package! helm-lsp)
+
+(package! helm)
+
+(package! lsp-treemacs)
