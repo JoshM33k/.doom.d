@@ -9,7 +9,7 @@
 (setq doom-font (font-spec :family "JetBrains Mono" :size 13))
 
 (cond (:system 'macos
-               (setq doom-font (font-spec :family "JetBrains Mono" :size 16))))
+               (setq doom-font (font-spec :family "JetBrains Mono" :size 14))))
 
 (setq doom-theme 'doom-dracula)
 

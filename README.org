@@ -79,7 +79,7 @@ On my Macbook, the font size of 14 is a bit small to read. I still want 14 to be
 
 #+begin_src emacs-lisp
 (cond (:system 'macos
-               (setq doom-font (font-spec :family "JetBrains Mono" :size 16))))
+               (setq doom-font (font-spec :family "JetBrains Mono" :size 14))))
 #+end_src
 
 * Doom Emacs Theme
