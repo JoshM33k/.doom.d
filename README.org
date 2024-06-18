@@ -423,7 +423,7 @@ This turns on yas global mode.
 ** Helm
 
 #+begin_src emacs-lisp
-(use-package! helm :config (helm-mode))
+;(use-package! helm :config (helm-mode))
 #+end_src
 
 * Random Fixes

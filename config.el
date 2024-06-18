@@ -197,7 +197,7 @@
 
 (use-package! dap-mode :after lsp-mode :config (dap-auto-configure-mode))
 
-(use-package! helm :config (helm-mode))
+;(use-package! helm :config (helm-mode))
 
 ;; workaround for large title bar on macOS Sonoma
 ;; see https://github.com/doomemacs/doomemacs/issues/7532
