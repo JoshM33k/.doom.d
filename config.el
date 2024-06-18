@@ -28,19 +28,29 @@
   :demand
   :init
   (setq fontaine-presets
-        `((JetBrains
+        `((JetBrains-Light
            :default-family "JetBrains Mono"
            :default-weight light
            :default-height ,(- jm/base-font-height 10))
-          (VCTR
+          (JetBrains-Regular
+           :default-family "JetBrains Mono"
+           :default-weight regular
+           :default-height ,(- jm/base-font-height 10))
+          (VCTR-Light
            :default-family "VCTR Mono Trial v0.12"
            :default-weight light
+           :default-height ,(- jm/base-font-height 10))
+          (VCTR-Regular
+           :default-family "VCTR Mono Trial v0.12"
+           :default-weight regular
            :default-height ,(- jm/base-font-height 10))
           ))
   :config
   (fontaine-set-preset (fontaine-store-latest-preset))
   :hook
   (fontaine-set-preset . fontaine-store-latest-preset))
+;;(fontaine-set-preset (or (fontaine-restore-latest-preset) 'JetBrains-Regular))
+;(fontaine-mode 1)
 
 (setq doom-theme 'doom-dracula)
 
