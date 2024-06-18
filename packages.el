@@ -84,3 +84,5 @@
 (package! helm)
 
 (package! lsp-treemacs)
+
+(package! fontaine)

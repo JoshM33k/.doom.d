@@ -10,6 +10,7 @@
 - [[#config-disclaimer][Config Disclaimer]]
 - [[#user-identity][User Identity]]
 - [[#font-settings][Font Settings]]
+  - [[#fontaine][Fontaine]]
 - [[#doom-emacs-theme][Doom Emacs Theme]]
 - [[#line-numbering][Line Numbering]]
 - [[#org-mode-settings][Org Mode Settings]]
@@ -30,6 +31,10 @@
   - [[#lsp-java][Lsp-java]]
   - [[#dap-mode][Dap-Mode]]
   - [[#helm][Helm]]
+- [[#random-fixes][Random Fixes]]
+  - [[#reduce-toolbar-thickness-on-mac][Reduce Toolbar Thickness on Mac]]
+- [[#useful-functions][Useful Functions]]
+  - [[#google-current-word][Google Current Word]]
 
 * About This Config
 This org file is a /literate/ config file for [[https://github.com/doomemacs/doomemacs][Doom Emacs]]. What that means is that this file itself is evaluated and used to write out the actual config.el file that is read when Doom Emacs starts up. The config.el file is no longer edited directly. This process is called /tangling/. This allows us to write out our documentation directly alongside the /actual code/ that will be evaluated by Doom Emacs, which is pretty neat!
@@ -71,15 +76,58 @@ More info on doom fonts can be found at ~C-h v doom-font~.
 
 My default font I like to use for Emacs is made by JetBrains, called JetBrainsMono. You can download it here:  https://www.jetbrains.com/lp/mono/
 
+Below, a function is defined, ~font-exists-p~, that when passed a font string will return true if the font is found in the list of system fonts.
+This function is then used in a condition block to check whether a font is used before setting that as our doom font.
+I currently have another check for JetBrains Mono in the condition as an example of how you'd add a fallback font if the first oen is not found.
+
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "JetBrains Mono" :size 13))
+(defun font-exists-p (font) (if (null (x-list-fonts font)) nil t))
+(when (window-system)
+  (cond ((font-exists-p "JetBrains Mono") (setq doom-font (font-spec :family "JetBrains Mono" :size 13)))
+    ((font-exists-p "JetBrains Mono") (setq doom-font (font-spec :family "JetBrains Mono" :size 13))))
+  (cond ((font-exists-p "Noto Sans") (setq doom-variable-pitch-font (font-spec :family "Noto Sans" :size 13)))))
+;;(setq doom-font (font-spec :family "JetBrains Mono" :size 13))
 #+end_src
 
-On my Macbook, the font size of 14 is a bit small to read. I still want 14 to be my default size elsewhere, but for Mac OS, I bump the size up to 16 instead, still using JetBrainsMono as the font.
+On my Macbook, the font size of 13 is a bit small to read. I still want 13 to be my default size elsewhere, but for Mac OS, I bump the size up to 14 instead, still using whatever font was set above by not specifying a new font family, just a new size.
+
+I don't currently like how I'm doing this, but it's the only way I've found so far to make it work. The inner portion of the 'is macos' condition is just a copy/paste of the above font settings, but with a larger size. I was hoping I could simply specify ~(setq doom-font (font-spec :size 14))~ and that would leave the existing font family unchanged, but that does not look to be the case.
 
 #+begin_src emacs-lisp
 (cond (:system 'macos
-               (setq doom-font (font-spec :family "JetBrains Mono" :size 14))))
+               (when (window-system)
+  (cond ((font-exists-p "JetBrains Mono") (setq doom-font (font-spec :family "JetBrains Mono" :size 14)))
+    ((font-exists-p "JetBrains Mono") (setq doom-font (font-spec :family "JetBrains Mono" :size 14))))
+  (cond ((font-exists-p "Noto Sans") (setq doom-variable-pitch-font (font-spec :family "Noto Sans" :size 14)))))
+               ))
+#+end_src
+
+** Fontaine
+Fontaine lets you define font presents, and then swap between them using ~M-x fontaine-set-preset~. The documentation for fontaine is here: https://protesilaos.com/emacs/fontaine
+The configuration here was primarily based on the setup found here: https://github.com/duien/dotfiles/blob/main/home/.yak-emacs/init.el
+
+#+begin_src emacs-lisp
+(use-package! fontaine
+  :preface
+  (defvar jm/base-font-height
+    160
+    "The main font size")
+  :demand
+  :init
+  (setq fontaine-presets
+        `((JetBrains
+           :default-family "JetBrains Mono"
+           :default-weight light
+           :default-height ,(- jm/base-font-height 10))
+          (VCTR
+           :default-family "VCTR Mono Trial v0.12"
+           :default-weight light
+           :default-height ,(- jm/base-font-height 10))
+          ))
+  :config
+  (fontaine-set-preset (fontaine-store-latest-preset))
+  :hook
+  (fontaine-set-preset . fontaine-store-latest-preset))
 #+end_src
 
 * Doom Emacs Theme
@@ -365,4 +413,37 @@ This turns on yas global mode.
 
 #+begin_src emacs-lisp
 (use-package! helm :config (helm-mode))
+#+end_src
+
+* Random Fixes
+This section is for random fixes and hacks that aren't important enough to put anywhere else. Some of them might later be fixed with updated packages!
+
+** Reduce Toolbar Thickness on Mac
+This is seemingly a bug in emacs-mac, but this is hopefully a quick-but-hacky fix to make the toolbar regular sized. All it does is enable ~tool-bar-mode~ and then instantly disable it, causing the toolbar to resize itself down to the correct size.
+
+See: https://github.com/doomemacs/doomemacs/issues/7532
+And the source of this fix: https://github.com/doomemacs/doomemacs/issues/7686#issuecomment-1954271794
+
+
+#+begin_src emacs-lisp
+;; workaround for large title bar on macOS Sonoma
+;; see https://github.com/doomemacs/doomemacs/issues/7532
+(add-hook 'doom-after-init-hook (lambda () (tool-bar-mode 1) (tool-bar-mode 0)))
+#+end_src
+
+* Useful Functions
+These functions will all live under ~jm/~ so that you can find and run them all with ~M-x jm/~
+
+** Google Current Word
+This will google the currently highlighted word, opening a web browser page to do so. This probably doesn't work at all when using X11 forwarding.
+
+#+begin_src emacs-lisp
+(defun jm/google-current-word ()
+  ;; initially written by chatgpt but later modified by u/Aminumbra
+  "Search the current word on Google using browse-url."
+  (interactive)
+  (let ((word (thing-at-point 'word)))
+    (if word
+        (browse-url (concat "https://www.google.com/search?q=" word))
+      (message "No word found at point."))))
 #+end_src

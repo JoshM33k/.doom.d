@@ -6,10 +6,41 @@
 (setq user-full-name "Josh Meek"
       user-mail-address "meek.josh@gmail.com")
 
-(setq doom-font (font-spec :family "JetBrains Mono" :size 13))
+(defun font-exists-p (font) (if (null (x-list-fonts font)) nil t))
+(when (window-system)
+  (cond ((font-exists-p "JetBrains Mono") (setq doom-font (font-spec :family "JetBrains Mono" :size 13)))
+    ((font-exists-p "JetBrains Mono") (setq doom-font (font-spec :family "JetBrains Mono" :size 13))))
+  (cond ((font-exists-p "Noto Sans") (setq doom-variable-pitch-font (font-spec :family "Noto Sans" :size 13)))))
+;;(setq doom-font (font-spec :family "JetBrains Mono" :size 13))
 
 (cond (:system 'macos
-               (setq doom-font (font-spec :family "JetBrains Mono" :size 14))))
+               (when (window-system)
+  (cond ((font-exists-p "JetBrains Mono") (setq doom-font (font-spec :family "JetBrains Mono" :size 14)))
+    ((font-exists-p "JetBrains Mono") (setq doom-font (font-spec :family "JetBrains Mono" :size 14))))
+  (cond ((font-exists-p "Noto Sans") (setq doom-variable-pitch-font (font-spec :family "Noto Sans" :size 14)))))
+               ))
+
+(use-package! fontaine
+  :preface
+  (defvar jm/base-font-height
+    160
+    "The main font size")
+  :demand
+  :init
+  (setq fontaine-presets
+        `((JetBrains
+           :default-family "JetBrains Mono"
+           :default-weight light
+           :default-height ,(- jm/base-font-height 10))
+          (VCTR
+           :default-family "VCTR Mono Trial v0.12"
+           :default-weight light
+           :default-height ,(- jm/base-font-height 10))
+          ))
+  :config
+  (fontaine-set-preset (fontaine-store-latest-preset))
+  :hook
+  (fontaine-set-preset . fontaine-store-latest-preset))
 
 (setq doom-theme 'doom-dracula)
 
@@ -157,3 +188,16 @@
 (use-package! dap-mode :after lsp-mode :config (dap-auto-configure-mode))
 
 (use-package! helm :config (helm-mode))
+
+;; workaround for large title bar on macOS Sonoma
+;; see https://github.com/doomemacs/doomemacs/issues/7532
+(add-hook 'doom-after-init-hook (lambda () (tool-bar-mode 1) (tool-bar-mode 0)))
+
+(defun jm/google-current-word ()
+  ;; initially written by chatgpt but later modified by u/Aminumbra
+  "Search the current word on Google using browse-url."
+  (interactive)
+  (let ((word (thing-at-point 'word)))
+    (if word
+        (browse-url (concat "https://www.google.com/search?q=" word))
+      (message "No word found at point."))))
