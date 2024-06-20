@@ -17,6 +17,9 @@
   - [[#org-directory][Org Directory]]
   - [[#word-wrap-in-org-files][Word Wrap in Org Files]]
   - [[#auto-tangle][Auto-Tangle]]
+  - [[#hide-emphasis-markers][Hide Emphasis Markers]]
+  - [[#improve-list-characters][Improve List Characters]]
+  - [[#org-bullets][Org Bullets]]
   - [[#denote][Denote]]
 - [[#window-and-frame-management][Window and Frame Management]]
   - [[#initial-frame-sizing][Initial Frame Sizing]]
@@ -178,6 +181,31 @@ Sometimes it can be a pain to remember to tangle this file, so this sets up 'aut
 
 #+begin_src emacs-lisp
 (add-hook 'org-mode-hook 'org-auto-tangle-mode)
+#+end_src
+
+** Hide Emphasis Markers
+This will hide the various emphasis marks that modify text (e.g. /.../ for italics, *...* for bold, etc.). The text still exists in the file, just isn't displayed.
+
+#+begin_src emacs-lisp
+(setq org-hide-emphasis-markers t)
+#+end_src
+
+** Improve List Characters
+This will change the ~-~ character used in lists to a centered dot instead.
+
+#+begin_src emacs-lisp
+(font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+#+end_src
+
+** Org Bullets
+This will improve the look of headline markers, replacing them with different unicode bullets.
+
+#+begin_src emacs-lisp
+(use-package org-bullets
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 #+end_src
 
 ** Denote

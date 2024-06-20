@@ -63,6 +63,16 @@
 
 (add-hook 'org-mode-hook 'org-auto-tangle-mode)
 
+(setq org-hide-emphasis-markers t)
+
+(font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+(use-package org-bullets
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
 (setq denote-directory (expand-file-name "~/org/"))
 
 (setq denote-known-keywords '("emacs" "programming" "managing" "learning"))

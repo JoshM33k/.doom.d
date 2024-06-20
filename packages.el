@@ -86,3 +86,5 @@
 (package! lsp-treemacs)
 
 (package! fontaine)
+
+(package! org-bullets)
