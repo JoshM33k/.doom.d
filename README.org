@@ -243,6 +243,14 @@ This tells denote to show a few lines of context from the file when display back
 (setq denote-backlinks-show-context t)
 #+end_src
 
+*** Automatically Rename Denote Buffers
+This will rename denote buffers when you open them so they no longer show the long file name, and instead show "[D]" followed by the file's title.
+
+#+begin_src emacs-lisp
+;(setq denote-rename-buffer-format "[D] %t%b")
+;(denote-rename-buffer-mode 1)
+#+end_src
+
 *** Fontification
 This setting does not currently work in Doom Emacs because Doom uses diredfl, and these fontification settings do not work when diredfl is enabled. However, I'm leaving them here as reference in case that ever changes.
 
@@ -327,7 +335,20 @@ Note: This does not work well on dual-monitor setups currently.
     (set-frame-position (selected-frame) a-left a-top)
     (set-frame-size (selected-frame) (truncate a-width)  (truncate a-height) t)))
 (setq frame-resize-pixelwise t)
-(my/set-initial-frame)
+;;(my/set-initial-frame)
+#+end_src
+
+A second attempt at initial frame sizing:
+#+begin_src emacs-lisp
+(defun my/frame-recenter (&optional frame)
+  "Center FRAME on the screen.
+FRAME can be a frame name, a terminal name, or a frame.
+If FRAME is omitted or nil, use currently selected frame."
+  (interactive)
+  (unless (eq 'maximised (frame-parameter nil 'fullscreen))
+    (modify-frame-parameters
+     frame '((user-position . t) (top . 0.5) (left . 0.5)))))
+(my/frame-recenter)
 #+end_src
 
 ** Focus New Window

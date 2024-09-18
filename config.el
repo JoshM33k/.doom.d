@@ -81,6 +81,9 @@
 
 (setq denote-backlinks-show-context t)
 
+;(setq denote-rename-buffer-format "[D] %t%b")
+;(denote-rename-buffer-mode 1)
+
 (setq denote-dired-directories-include-subdirectories t)
 (setq denote-dired-directories
       (list denote-directory
@@ -134,7 +137,17 @@
     (set-frame-position (selected-frame) a-left a-top)
     (set-frame-size (selected-frame) (truncate a-width)  (truncate a-height) t)))
 (setq frame-resize-pixelwise t)
-(my/set-initial-frame)
+;;(my/set-initial-frame)
+
+(defun my/frame-recenter (&optional frame)
+  "Center FRAME on the screen.
+FRAME can be a frame name, a terminal name, or a frame.
+If FRAME is omitted or nil, use currently selected frame."
+  (interactive)
+  (unless (eq 'maximised (frame-parameter nil 'fullscreen))
+    (modify-frame-parameters
+     frame '((user-position . t) (top . 0.5) (left . 0.5)))))
+(my/frame-recenter)
 
 (setq evil-split-window-below t
       evil-vsplit-window-right t)
