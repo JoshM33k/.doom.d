@@ -53,6 +53,7 @@
 ;(fontaine-mode 1)
 
 (setq doom-theme 'doom-dracula)
+;;(setq doom-theme 'doom-outrun-electric)
 
 (setq display-line-numbers-type t)
 
@@ -128,26 +129,34 @@
   ;; Exlude keywords or regex
   (denote-explore-network-keywords-ignore '("bib")))
 
-(defun my/set-initial-frame ()
-  (let* ((base-factor 0.70)
-         (a-width (* (display-pixel-width) base-factor))
-         (a-height (* (display-pixel-height) base-factor))
-         (a-left (truncate (/ (- (display-pixel-width) a-width) 2)))
-         (a-top (truncate (/ (- (display-pixel-height) a-height) 2))))
-    (set-frame-position (selected-frame) a-left a-top)
-    (set-frame-size (selected-frame) (truncate a-width)  (truncate a-height) t)))
-(setq frame-resize-pixelwise t)
-;;(my/set-initial-frame)
-
-(defun my/frame-recenter (&optional frame)
-  "Center FRAME on the screen.
-FRAME can be a frame name, a terminal name, or a frame.
-If FRAME is omitted or nil, use currently selected frame."
+(defun joshm33k/center-frame-on-primary-monitor ()
+  "Centers the current frame on the primary monitor and resizes it to 75% of the monitor's size."
   (interactive)
-  (unless (eq 'maximised (frame-parameter nil 'fullscreen))
-    (modify-frame-parameters
-     frame '((user-position . t) (top . 0.5) (left . 0.5)))))
-(my/frame-recenter)
+  (let* ((monitor-attributes (car (display-monitor-attributes-list))) ; Get primary monitor's attributes
+         (monitor-geometry (assoc 'geometry monitor-attributes))
+         (monitor-x (nth 0 (cdr monitor-geometry)))
+         (monitor-y (nth 1 (cdr monitor-geometry)))
+         (monitor-width (nth 2 (cdr monitor-geometry)))
+         (monitor-height (nth 3 (cdr monitor-geometry)))
+         ;; Convert monitor size from pixels to characters
+         (char-width (frame-char-width))
+         (char-height (frame-char-height))
+         (new-width (round (* 0.75 (/ monitor-width char-width))))
+         (new-height (round (* 0.75 (/ monitor-height char-height))))
+         (new-x (+ monitor-x (/ (- monitor-width (* new-width char-width)) 2)))
+         (new-y (+ monitor-y (/ (- monitor-height (* new-height char-height)) 2))))
+    (set-frame-size (selected-frame) new-width new-height)
+    (set-frame-position (selected-frame) new-x new-y)))
+
+;; Optional: Bind the function to a key for quick access
+;;(global-set-key (kbd "C-c C-f") 'center-frame-on-primary-monitor)
+
+(joshm33k/center-frame-on-primary-monitor)
+
+(map! :leader
+      (:prefix-map ("z" . "Utilities")
+                (:prefix ("f" . "Frame Management")
+                         :desc "Center the frame on the primary monitor" "c" #'joshm33k/center-frame-on-primary-monitor)))
 
 (setq evil-split-window-below t
       evil-vsplit-window-right t)

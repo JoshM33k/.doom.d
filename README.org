@@ -149,6 +149,7 @@ The configuration here was primarily based on the setup found here: https://gith
 
 #+begin_src emacs-lisp
 (setq doom-theme 'doom-dracula)
+;;(setq doom-theme 'doom-outrun-electric)
 #+end_src
 
 * Line Numbering
@@ -318,37 +319,43 @@ These settings just do some generic setup for denote explore, mainly specifying 
 These settings pertain to either the Emacs "window" itself (the frame) or to split windows inside of Emacs.
 
 ** Initial Frame Sizing
-This sets the initial size of the Doom Emacs window to be proportional to the screen displaying it. It should take up 70% of the window, and be centered.
-
-This was taken from: https://www.reddit.com/r/emacs/comments/9c0a4d/tip_setting_initial_frame_size_and_position/
-
-Note: This does not work well on dual-monitor setups currently.
-- [ ] - Fix issue with the set-initial-frame method for dual monitors to only 'fit' to a single monitor.
+This sets the initial size of the Doom Emacs window to be proportional to the screen displaying it. It should take up 75% of the window, and be centered.
 
 #+begin_src emacs-lisp
-(defun my/set-initial-frame ()
-  (let* ((base-factor 0.70)
-         (a-width (* (display-pixel-width) base-factor))
-         (a-height (* (display-pixel-height) base-factor))
-         (a-left (truncate (/ (- (display-pixel-width) a-width) 2)))
-         (a-top (truncate (/ (- (display-pixel-height) a-height) 2))))
-    (set-frame-position (selected-frame) a-left a-top)
-    (set-frame-size (selected-frame) (truncate a-width)  (truncate a-height) t)))
-(setq frame-resize-pixelwise t)
-;;(my/set-initial-frame)
+(defun joshm33k/center-frame-on-primary-monitor ()
+  "Centers the current frame on the primary monitor and resizes it to 75% of the monitor's size."
+  (interactive)
+  (let* ((monitor-attributes (car (display-monitor-attributes-list))) ; Get primary monitor's attributes
+         (monitor-geometry (assoc 'geometry monitor-attributes))
+         (monitor-x (nth 0 (cdr monitor-geometry)))
+         (monitor-y (nth 1 (cdr monitor-geometry)))
+         (monitor-width (nth 2 (cdr monitor-geometry)))
+         (monitor-height (nth 3 (cdr monitor-geometry)))
+         ;; Convert monitor size from pixels to characters
+         (char-width (frame-char-width))
+         (char-height (frame-char-height))
+         (new-width (round (* 0.75 (/ monitor-width char-width))))
+         (new-height (round (* 0.75 (/ monitor-height char-height))))
+         (new-x (+ monitor-x (/ (- monitor-width (* new-width char-width)) 2)))
+         (new-y (+ monitor-y (/ (- monitor-height (* new-height char-height)) 2))))
+    (set-frame-size (selected-frame) new-width new-height)
+    (set-frame-position (selected-frame) new-x new-y)))
+
+;; Optional: Bind the function to a key for quick access
+;;(global-set-key (kbd "C-c C-f") 'center-frame-on-primary-monitor)
+
+(joshm33k/center-frame-on-primary-monitor)
 #+end_src
 
-A second attempt at initial frame sizing:
+*** Keybinding to Center Frame on Primary Monitor
+
+The function above to center the frame at 75% of the monitor's size is called during startup, but this keybinding allows you to reset the frame back to that at any time.
+
 #+begin_src emacs-lisp
-(defun my/frame-recenter (&optional frame)
-  "Center FRAME on the screen.
-FRAME can be a frame name, a terminal name, or a frame.
-If FRAME is omitted or nil, use currently selected frame."
-  (interactive)
-  (unless (eq 'maximised (frame-parameter nil 'fullscreen))
-    (modify-frame-parameters
-     frame '((user-position . t) (top . 0.5) (left . 0.5)))))
-(my/frame-recenter)
+(map! :leader
+      (:prefix-map ("z" . "Utilities")
+                (:prefix ("f" . "Frame Management")
+                         :desc "Center the frame on the primary monitor" "c" #'joshm33k/center-frame-on-primary-monitor)))
 #+end_src
 
 ** Focus New Window
@@ -432,6 +439,8 @@ Company is the autocompletion tool that Doom Emacs uses, and it can get quite an
   (setq company-insertion-triggers nil)
   )
 #+end_src
+
+#+RESULTS:
 
 * Java Development
 Getting java development working as well as IntelliJ is a backburner project for me. This section will be the projects and configurations added to hopefully enable that. Things added here may get moved to their own sections that are more appropriate once this setup solidifies.
