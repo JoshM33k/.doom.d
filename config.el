@@ -74,6 +74,16 @@
     :config
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
+(setq org-agenda-custom-commands
+      '(("p" "Planning"
+         ((tags-todo "+@planning"
+                     ((org-agenda-overriding-header "Planning Tasks")))
+          (tags-todo "-{.*}"
+                     ((org-agenda-overriding-header "Untagged Tasks")))))))
+
+;;(setq org-todo-keywords
+;;      '((sequence "TODO" "NEXT" "PROG" "|" "DONE")))
+
 (setq denote-directory (expand-file-name "~/org/"))
 
 (setq denote-known-keywords '("emacs" "programming" "managing" "learning"))

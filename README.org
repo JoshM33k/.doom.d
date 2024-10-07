@@ -20,6 +20,8 @@
   - [[#hide-emphasis-markers][Hide Emphasis Markers]]
   - [[#improve-list-characters][Improve List Characters]]
   - [[#org-bullets][Org Bullets]]
+  - [[#custom-org-agenda-views][Custom Org Agenda Views]]
+  - [[#org-todo-keywords-customization][org-todo-keywords Customization]]
   - [[#denote][Denote]]
 - [[#window-and-frame-management][Window and Frame Management]]
   - [[#initial-frame-sizing][Initial Frame Sizing]]
@@ -207,6 +209,30 @@ This will improve the look of headline markers, replacing them with different un
 (use-package org-bullets
     :config
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+#+end_src
+
+** Custom Org Agenda Views
+This defines custom org agenda views using information attached to my TODO items.
+
+This is based on [[https://www.youtube.com/watch?v=-9rpQA6O3aM][this System Crafters video]].
+
+The following creates a new org agenda view for items tagged with @planning, and a separate section for untagged tasks. You can add additional tags with +<tag> in the tag string, and even do -<tag> to remove them from the agenda view.
+
+#+begin_src emacs-lisp
+(setq org-agenda-custom-commands
+      '(("p" "Planning"
+         ((tags-todo "+@planning"
+                     ((org-agenda-overriding-header "Planning Tasks")))
+          (tags-todo "-{.*}"
+                     ((org-agenda-overriding-header "Untagged Tasks")))))))
+#+end_src
+
+** org-todo-keywords Customization
+This sets up some additional todo 'states', in addition to just TODO and DONE.
+
+#+begin_src emacs-lisp
+;;(setq org-todo-keywords
+;;      '((sequence "TODO" "NEXT" "PROG" "|" "DONE")))
 #+end_src
 
 ** Denote
