@@ -83,14 +83,17 @@ My default font I like to use for Emacs is made by JetBrains, called JetBrainsMo
 
 Below, a function is defined, ~font-exists-p~, that when passed a font string will return true if the font is found in the list of system fonts.
 This function is then used in a condition block to check whether a font is used before setting that as our doom font.
-I currently have another check for JetBrains Mono in the condition as an example of how you'd add a fallback font if the first oen is not found.
+I currently have another check for JetBrains Mono in the condition as an example of how you'd add a fallback font if the first one is not found.
 
 #+begin_src emacs-lisp
 (defun font-exists-p (font) (if (null (x-list-fonts font)) nil t))
 (when (window-system)
   (cond ((font-exists-p "JetBrains Mono") (setq doom-font (font-spec :family "JetBrains Mono" :size 13)))
     ((font-exists-p "JetBrains Mono") (setq doom-font (font-spec :family "JetBrains Mono" :size 13))))
-  (cond ((font-exists-p "Noto Sans") (setq doom-variable-pitch-font (font-spec :family "Noto Sans" :size 13)))))
+  (cond ((font-exists-p "Noto Sans") (setq doom-variable-pitch-font (font-spec :family "Noto Sans" :size 16 :weight 'bold)))))
+  ;;(cond ((font-exists-p "Noto Sans") (setq doom-variable-pitch-font (font-spec :family "ET Book" :size 13)))))
+
+;;(setq doom-font (font-spec :family "ETBookOT"))
 ;;(setq doom-font (font-spec :family "JetBrains Mono" :size 13))
 #+end_src
 
@@ -115,7 +118,7 @@ The configuration here was primarily based on the setup found here: https://gith
 (use-package! fontaine
   :preface
   (defvar jm/base-font-height
-    160
+    140
     "The main font size")
   :demand
   :init
@@ -136,6 +139,10 @@ The configuration here was primarily based on the setup found here: https://gith
            :default-family "VCTR Mono Trial v0.12"
            :default-weight regular
            :default-height ,(- jm/base-font-height 10))
+          (ETBook
+           :default-family "ETBookOT"
+           :default-weight bold
+           :default-height ,(- jm/base-font-height 10))
           ))
   :config
   (fontaine-set-preset (fontaine-store-latest-preset))
@@ -150,8 +157,9 @@ The configuration here was primarily based on the setup found here: https://gith
 ~doom-theme~ is used to set a color theme that will be used upon startup. To browse the other available themes, you can use ~M-x load-theme~ to check them out.
 
 #+begin_src emacs-lisp
-(setq doom-theme 'doom-dracula)
+;;(setq doom-theme 'doom-dracula)
 ;;(setq doom-theme 'doom-outrun-electric)
+(setq doom-theme 'doom-solarized-light)
 #+end_src
 
 * Line Numbering

@@ -10,7 +10,10 @@
 (when (window-system)
   (cond ((font-exists-p "JetBrains Mono") (setq doom-font (font-spec :family "JetBrains Mono" :size 13)))
     ((font-exists-p "JetBrains Mono") (setq doom-font (font-spec :family "JetBrains Mono" :size 13))))
-  (cond ((font-exists-p "Noto Sans") (setq doom-variable-pitch-font (font-spec :family "Noto Sans" :size 13)))))
+  (cond ((font-exists-p "Noto Sans") (setq doom-variable-pitch-font (font-spec :family "Noto Sans" :size 16 :weight 'bold)))))
+  ;;(cond ((font-exists-p "Noto Sans") (setq doom-variable-pitch-font (font-spec :family "ET Book" :size 13)))))
+
+;;(setq doom-font (font-spec :family "ETBookOT"))
 ;;(setq doom-font (font-spec :family "JetBrains Mono" :size 13))
 
 (cond (:system 'macos
@@ -23,7 +26,7 @@
 (use-package! fontaine
   :preface
   (defvar jm/base-font-height
-    160
+    140
     "The main font size")
   :demand
   :init
@@ -44,6 +47,10 @@
            :default-family "VCTR Mono Trial v0.12"
            :default-weight regular
            :default-height ,(- jm/base-font-height 10))
+          (ETBook
+           :default-family "ETBookOT"
+           :default-weight bold
+           :default-height ,(- jm/base-font-height 10))
           ))
   :config
   (fontaine-set-preset (fontaine-store-latest-preset))
@@ -52,8 +59,9 @@
 ;;(fontaine-set-preset (or (fontaine-restore-latest-preset) 'JetBrains-Regular))
 ;(fontaine-mode 1)
 
-(setq doom-theme 'doom-dracula)
+;;(setq doom-theme 'doom-dracula)
 ;;(setq doom-theme 'doom-outrun-electric)
+(setq doom-theme 'doom-solarized-light)
 
 (setq display-line-numbers-type t)
 
