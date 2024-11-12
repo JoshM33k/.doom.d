@@ -59,9 +59,9 @@
 ;;(fontaine-set-preset (or (fontaine-restore-latest-preset) 'JetBrains-Regular))
 ;(fontaine-mode 1)
 
-;;(setq doom-theme 'doom-dracula)
+(setq doom-theme 'doom-dracula)
 ;;(setq doom-theme 'doom-outrun-electric)
-(setq doom-theme 'doom-solarized-light)
+;;(setq doom-theme 'doom-solarized-light)
 
 (setq display-line-numbers-type t)
 

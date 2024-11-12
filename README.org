@@ -157,9 +157,9 @@ The configuration here was primarily based on the setup found here: https://gith
 ~doom-theme~ is used to set a color theme that will be used upon startup. To browse the other available themes, you can use ~M-x load-theme~ to check them out.
 
 #+begin_src emacs-lisp
-;;(setq doom-theme 'doom-dracula)
+(setq doom-theme 'doom-dracula)
 ;;(setq doom-theme 'doom-outrun-electric)
-(setq doom-theme 'doom-solarized-light)
+;;(setq doom-theme 'doom-solarized-light)
 #+end_src
 
 * Line Numbering
